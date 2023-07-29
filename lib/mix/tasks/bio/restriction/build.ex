@@ -58,7 +58,7 @@ defmodule Mix.Tasks.Bio.Restriction.Build do
     put_info("Writing module...")
 
     File.write(
-      "lib/restriction/enzyme.ex",
+      "lib/enzyme.ex",
       ~s"""
       # DO NOT MODIFY THIS FILE DIRECTLY
       # This module is generated using `mix bio.restriction.build`
@@ -76,6 +76,7 @@ defmodule Mix.Tasks.Bio.Restriction.Build do
       "CviKI-1" would become `cviki_1`.
       \"\"\"
 
+
       @type supplier_code :: atom()
       @type supplier_list :: [supplier_code]
       @type t :: %__MODULE__{
@@ -91,85 +92,8 @@ defmodule Mix.Tasks.Bio.Restriction.Build do
 
       @suppliers %#{stringify(suppliers)}
 
-      @doc \"\"\"
-      Return a supplier's full name from a code.
+      use Bio.Restriction.Enzyme.Core
 
-      Supplier information is encoded in a list of atoms on each struct, which
-      can be used to filter the enzymes that you make available or ensure that
-      they are available through a given entity.
-
-      This function allows you to get the full name for a given entity from that
-      code.
-
-      # Examples
-          iex>Bio.Restriction.Enzyme.get_supplier(:N)
-          "New England Biolabs"
-
-          iex>Bio.Restriction.Enzyme.get_supplier("b")
-          "Thermo Fisher Scientific"
-      \"\"\"
-      @spec get_supplier(atom() | String.t()) :: String.t()
-      def get_supplier(code) when is_binary(code) do
-        code
-        |> String.upcase()
-        |> String.to_existing_atom()
-        |> get_supplier()
-      end
-
-      def get_supplier(code) when is_atom(code) do
-        @suppliers
-        |> Map.get(code)
-      end
-
-      @doc \"\"\"
-      Get an enzyme struct by name, where name is either a binary or atom and
-      case insensitive.
-
-      # Examples
-          iex>Bio.Restriction.Enzyme.get(:CviRI)
-          %Bio.Restriction.Enzyme{
-              blunt?: true,
-              cut_1: 2,
-              cut_2: 2,
-              cut_3: 0,
-              cut_4: 0,
-              name: "CviRI",
-              pattern: "tgca"
-            }
-
-          iex>Bio.Restriction.Enzyme.get("CviRI")
-          %Bio.Restriction.Enzyme{
-              blunt?: true,
-              cut_1: 2,
-              cut_2: 2,
-              cut_3: 0,
-              cut_4: 0,
-              name: "CviRI",
-              pattern: "tgca"
-            }
-      \"\"\"
-      @spec get(atom() | String.t()) :: t()
-      def get(name) when is_atom(name) do
-        name
-        |> Atom.to_string()
-        |> get_struct()
-      end
-
-      def get(name) when is_binary(name) do
-        get_struct(name)
-      end
-
-      defp get_struct(name) do
-        func_name = name
-        |> String.downcase()
-        |> String.replace("-", "_")
-
-        try do
-          apply(__MODULE__, String.to_atom(func_name), [])
-        rescue
-          _ in UndefinedFunctionError -> raise "Unknown restriction enzyme \#\{func_name\}"
-        end
-      end
 
       @doc \"\"\"
       The primary struct for interacting with restriction enzymes
@@ -177,7 +101,7 @@ defmodule Mix.Tasks.Bio.Restriction.Build do
       defstruct #{to_source(Enum.at(enzymes, 0))}
       #{enzymes |> Enum.map(fn enzyme_map -> ~s"""
         @doc false
-        def #{Map.get(enzyme_map, :name) |> String.downcase() |> String.replace("-", "_")} do
+        def _#{Map.get(enzyme_map, :name) |> String.downcase() |> String.replace("-", "_")} do
           %Bio.Restriction.Enzyme#{stringify(enzyme_map)}
         end
         """ end)}

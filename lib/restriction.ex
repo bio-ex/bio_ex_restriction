@@ -33,12 +33,12 @@ defmodule Bio.Restriction do
   given restriction enzyme.
 
   ## Examples
-      iex> Bio.Restriction.digest("ttagatgacgtctcgattagagt", Bio.Restriction.Enzyme.bsmbi)
+      iex> Bio.Restriction.digest("ttagatgacgtctcgattagagt", Bio.Restriction.Enzyme.get!(:bsmbi))
       ["ttagatgacgtctcg", "attagagt"]
 
   Currently this will work for enzymes that look back as well:
 
-      iex> Bio.Restriction.digest("ggatgcagatcagacgaggattga", Bio.Restriction.Enzyme.bsp143i)
+      iex> Bio.Restriction.digest("ggatgcagatcagacgaggattga", Bio.Restriction.Enzyme.get!(:bsp143i))
       ["ggatgc", "agatcagacgaggattga"]
 
   It does not yet work on enzymes that would produce digestions with three parts
