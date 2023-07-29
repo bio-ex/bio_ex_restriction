@@ -45,86 +45,7 @@ defmodule Bio.Restriction.Enzyme do
     Y: "SinaClon BioScience Co."
   }
 
-  @doc """
-  Return a supplier's full name from a code.
-
-  Supplier information is encoded in a list of atoms on each struct, which
-  can be used to filter the enzymes that you make available or ensure that
-  they are available through a given entity.
-
-  This function allows you to get the full name for a given entity from that
-  code.
-
-  # Examples
-      iex>Bio.Restriction.Enzyme.get_supplier(:N)
-      "New England Biolabs"
-
-      iex>Bio.Restriction.Enzyme.get_supplier("b")
-      "Thermo Fisher Scientific"
-  """
-  @spec get_supplier(atom() | String.t()) :: String.t()
-  def get_supplier(code) when is_binary(code) do
-    code
-    |> String.upcase()
-    |> String.to_existing_atom()
-    |> get_supplier()
-  end
-
-  def get_supplier(code) when is_atom(code) do
-    @suppliers
-    |> Map.get(code)
-  end
-
-  @doc """
-  Get an enzyme struct by name, where name is either a binary or atom and
-  case insensitive.
-
-  # Examples
-      iex>Bio.Restriction.Enzyme.get(:CviRI)
-      %Bio.Restriction.Enzyme{
-          blunt?: true,
-          cut_1: 2,
-          cut_2: 2,
-          cut_3: 0,
-          cut_4: 0,
-          name: "CviRI",
-          pattern: "tgca"
-        }
-
-      iex>Bio.Restriction.Enzyme.get("CviRI")
-      %Bio.Restriction.Enzyme{
-          blunt?: true,
-          cut_1: 2,
-          cut_2: 2,
-          cut_3: 0,
-          cut_4: 0,
-          name: "CviRI",
-          pattern: "tgca"
-        }
-  """
-  @spec get(atom() | String.t()) :: t()
-  def get(name) when is_atom(name) do
-    name
-    |> Atom.to_string()
-    |> get_struct()
-  end
-
-  def get(name) when is_binary(name) do
-    get_struct(name)
-  end
-
-  defp get_struct(name) do
-    func_name =
-      name
-      |> String.downcase()
-      |> String.replace("-", "_")
-
-    try do
-      apply(__MODULE__, String.to_atom(func_name), [])
-    rescue
-      _ in UndefinedFunctionError -> raise "Unknown restriction enzyme #{func_name}"
-    end
-  end
+  use Bio.Restriction.Enzyme.Core
 
   @doc """
   The primary struct for interacting with restriction enzymes
@@ -139,7 +60,7 @@ defmodule Bio.Restriction.Enzyme do
             suppliers: []
 
   @doc false
-  def aani do
+  def _aani do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -153,7 +74,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aari do
+  def _aari do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 11,
@@ -167,7 +88,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aasi do
+  def _aasi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -181,7 +102,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aatii do
+  def _aatii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -195,7 +116,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aba6411ii do
+  def _aba6411ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -209,7 +130,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aba13301i do
+  def _aba13301i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -223,7 +144,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def abab8342iv do
+  def _abab8342iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -237,7 +158,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def abaciii do
+  def _abaciii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -251,7 +172,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def abapba3ii do
+  def _abapba3ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -265,7 +186,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def abasi do
+  def _abasi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 12,
@@ -279,7 +200,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def abaumb2i do
+  def _abaumb2i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -293,7 +214,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def abr4036ii do
+  def _abr4036ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -307,7 +228,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def absi do
+  def _absi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -321,7 +242,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acci do
+  def _acci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -335,7 +256,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def accii do
+  def _accii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -349,7 +270,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acciii do
+  def _acciii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -363,7 +284,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def accix do
+  def _accix do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -377,7 +298,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def accx do
+  def _accx do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -391,7 +312,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acc16i do
+  def _acc16i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -405,7 +326,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acc36i do
+  def _acc36i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 10,
@@ -419,7 +340,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acc65i do
+  def _acc65i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -433,7 +354,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acc65v do
+  def _acc65v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -447,7 +368,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def accb1i do
+  def _accb1i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -461,7 +382,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def accb7i do
+  def _accb7i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -475,7 +396,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def accbsi do
+  def _accbsi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -489,7 +410,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aceiii do
+  def _aceiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 13,
@@ -503,7 +424,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acha6iii do
+  def _acha6iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -517,7 +438,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acii do
+  def _acii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -531,7 +452,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acli do
+  def _acli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -545,7 +466,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aclwi do
+  def _aclwi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 9,
@@ -559,7 +480,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acoi do
+  def _acoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -573,7 +494,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aco12261ii do
+  def _aco12261ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -587,7 +508,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acoy31ii do
+  def _acoy31ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -601,7 +522,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acsi do
+  def _acsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -615,7 +536,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acui do
+  def _acui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 22,
@@ -629,7 +550,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acvi do
+  def _acvi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -643,7 +564,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def acyi do
+  def _acyi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -657,7 +578,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def adei do
+  def _adei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -671,7 +592,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def adh6u21i do
+  def _adh6u21i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -685,7 +606,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def afai do
+  def _afai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -699,7 +620,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def afei do
+  def _afei do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -713,7 +634,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def afii do
+  def _afii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -727,7 +648,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aflii do
+  def _aflii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -741,7 +662,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def afliii do
+  def _afliii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -755,7 +676,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def agei do
+  def _agei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -769,7 +690,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def agsi do
+  def _agsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -783,7 +704,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ahaiii do
+  def _ahaiii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -797,7 +718,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ahdi do
+  def _ahdi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -811,7 +732,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ahli do
+  def _ahli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -825,7 +746,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ahyrbahi do
+  def _ahyrbahi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -839,7 +760,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ahyyl17i do
+  def _ahyyl17i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -853,7 +774,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ajii do
+  def _ajii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -867,7 +788,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ajni do
+  def _ajni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -881,7 +802,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ajui do
+  def _ajui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -8,
@@ -895,7 +816,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def alei do
+  def _alei do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -909,7 +830,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def alfi do
+  def _alfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -11,
@@ -923,7 +844,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aloi do
+  def _aloi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -8,
@@ -937,7 +858,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def alui do
+  def _alui do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -951,7 +872,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def alubi do
+  def _alubi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -965,7 +886,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def alwi do
+  def _alwi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 9,
@@ -979,7 +900,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def alw21i do
+  def _alw21i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -993,7 +914,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def alw26i do
+  def _alw26i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -1007,7 +928,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def alw44i do
+  def _alw44i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1021,7 +942,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def alwfi do
+  def _alwfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1035,7 +956,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def alwni do
+  def _alwni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -1049,7 +970,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ama87i do
+  def _ama87i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1063,7 +984,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def amacsi do
+  def _amacsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 17,
@@ -1077,7 +998,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aod1i do
+  def _aod1i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1091,7 +1012,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aor13hi do
+  def _aor13hi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1105,7 +1026,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aor51hi do
+  def _aor51hi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -1119,7 +1040,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aoxi do
+  def _aoxi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -1133,7 +1054,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def apai do
+  def _apai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -1147,7 +1068,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def apabi do
+  def _apabi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -1161,7 +1082,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def apali do
+  def _apali do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1175,7 +1096,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def apeki do
+  def _apeki do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1189,7 +1110,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def apoi do
+  def _apoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1203,7 +1124,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def apypi do
+  def _apypi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 26,
@@ -1217,7 +1138,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aquii do
+  def _aquii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -1231,7 +1152,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aquiii do
+  def _aquiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 26,
@@ -1245,7 +1166,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aquiv do
+  def _aquiv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 26,
@@ -1259,7 +1180,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def arsi do
+  def _arsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -9,
@@ -1273,7 +1194,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asci do
+  def _asci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -1287,7 +1208,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asei do
+  def _asei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -1301,7 +1222,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asi256i do
+  def _asi256i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1315,7 +1236,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asigi do
+  def _asigi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1329,7 +1250,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asisi do
+  def _asisi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -1343,7 +1264,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asl11923ii do
+  def _asl11923ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1357,7 +1278,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asp103i do
+  def _asp103i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1371,7 +1292,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asp337i do
+  def _asp337i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1385,7 +1306,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asp700i do
+  def _asp700i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -1399,7 +1320,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asp718i do
+  def _asp718i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1413,7 +1334,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aspa2i do
+  def _aspa2i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1427,7 +1348,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aspamdiv do
+  def _aspamdiv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1441,7 +1362,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aspbhi do
+  def _aspbhi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 13,
@@ -1455,7 +1376,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aspdut2v do
+  def _aspdut2v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1469,7 +1390,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aspjhl3ii do
+  def _aspjhl3ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1483,7 +1404,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asplei do
+  def _asplei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -1497,7 +1418,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aspnih4iii do
+  def _aspnih4iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1511,7 +1432,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asps9i do
+  def _asps9i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1525,7 +1446,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def aspslv7iii do
+  def _aspslv7iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1539,7 +1460,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asp114pii do
+  def _asp114pii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1553,7 +1474,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asui do
+  def _asui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1567,7 +1488,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asuii do
+  def _asuii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -1581,7 +1502,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asu14238iv do
+  def _asu14238iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1595,7 +1516,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asuc2i do
+  def _asuc2i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -1609,7 +1530,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asuhpi do
+  def _asuhpi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 13,
@@ -1623,7 +1544,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def asunhi do
+  def _asunhi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1637,7 +1558,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ateti do
+  def _ateti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1651,7 +1572,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def avai do
+  def _avai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1665,7 +1586,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def avaii do
+  def _avaii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1679,7 +1600,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def avaiii do
+  def _avaiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1693,7 +1614,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def avi249i do
+  def _avi249i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1707,7 +1628,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def avrii do
+  def _avrii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1721,7 +1642,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def awo1030iv do
+  def _awo1030iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1735,7 +1656,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def axyi do
+  def _axyi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -1749,7 +1670,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def baei do
+  def _baei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -11,
@@ -1763,7 +1684,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def baegi do
+  def _baegi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -1777,7 +1698,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bag18758i do
+  def _bag18758i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1791,7 +1712,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bali do
+  def _bali do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -1805,7 +1726,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bamhi do
+  def _bamhi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1819,7 +1740,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bani do
+  def _bani do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1833,7 +1754,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def banii do
+  def _banii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -1847,7 +1768,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def banli do
+  def _banli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1861,7 +1782,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bari do
+  def _bari do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -8,
@@ -1875,7 +1796,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def baui do
+  def _baui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -1889,7 +1810,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bau1417v do
+  def _bau1417v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1903,7 +1824,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbr52ii do
+  def _bbr52ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1917,7 +1838,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbr57iii do
+  def _bbr57iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1931,7 +1852,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbr7017ii do
+  def _bbr7017ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1945,7 +1866,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbr7017iii do
+  def _bbr7017iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -1959,7 +1880,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbrpi do
+  def _bbrpi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -1973,7 +1894,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbsi do
+  def _bbsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -1987,7 +1908,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbub31i do
+  def _bbub31i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2001,7 +1922,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbub31ii do
+  def _bbub31ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2015,7 +1936,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbvi do
+  def _bbvi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 13,
@@ -2029,7 +1950,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbvii do
+  def _bbvii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -2043,7 +1964,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbv12i do
+  def _bbv12i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -2057,7 +1978,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bbvci do
+  def _bbvci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2071,7 +1992,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bcci do
+  def _bcci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 9,
@@ -2085,7 +2006,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bce83i do
+  def _bce83i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 22,
@@ -2099,7 +2020,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bce3081i do
+  def _bce3081i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2113,7 +2034,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bce10661iii do
+  def _bce10661iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2127,7 +2048,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bceai do
+  def _bceai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 17,
@@ -2141,7 +2062,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bcesiv do
+  def _bcesiv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -8,
@@ -2155,7 +2076,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bcefi do
+  def _bcefi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 17,
@@ -2169,7 +2090,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bcgi do
+  def _bcgi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -11,
@@ -2183,7 +2104,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bcit130i do
+  def _bcit130i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2197,7 +2118,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bcivi do
+  def _bcivi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 12,
@@ -2211,7 +2132,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bcli do
+  def _bcli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -2225,7 +2146,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bcni do
+  def _bcni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2239,7 +2160,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bco11035iii do
+  def _bco11035iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2253,7 +2174,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bcodi do
+  def _bcodi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -2267,7 +2188,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bcui do
+  def _bcui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -2281,7 +2202,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bdai do
+  def _bdai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -11,
@@ -2295,7 +2216,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def beti do
+  def _beti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -2309,7 +2230,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bfai do
+  def _bfai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -2323,7 +2244,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bfasii do
+  def _bfasii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2337,7 +2258,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bfii do
+  def _bfii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 11,
@@ -2351,7 +2272,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bfmi do
+  def _bfmi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -2365,7 +2286,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bfoi do
+  def _bfoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -2379,7 +2300,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bfri do
+  def _bfri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -2393,7 +2314,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bfui do
+  def _bfui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 12,
@@ -2407,7 +2328,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bfuai do
+  def _bfuai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 10,
@@ -2421,7 +2342,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bga514i do
+  def _bga514i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2435,7 +2356,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bgli do
+  def _bgli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -2449,7 +2370,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bglii do
+  def _bglii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -2463,7 +2384,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bhe175ii do
+  def _bhe175ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2477,7 +2398,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bini do
+  def _bini do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 9,
@@ -2491,7 +2412,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bisi do
+  def _bisi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2505,7 +2426,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bkram31di do
+  def _bkram31di do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2519,7 +2440,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ble402ii do
+  def _ble402ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2533,7 +2454,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def blni do
+  def _blni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -2547,7 +2468,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bloaii do
+  def _bloaii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2561,7 +2482,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def blpi do
+  def _blpi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2575,7 +2496,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def blsi do
+  def _blsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -2589,7 +2510,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmcai do
+  def _bmcai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -2603,7 +2524,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bme18i do
+  def _bme18i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -2617,7 +2538,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bme1390i do
+  def _bme1390i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2631,7 +2552,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmedi do
+  def _bmedi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -2645,7 +2566,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmeri do
+  def _bmeri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -2659,7 +2580,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmet110i do
+  def _bmet110i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -2673,7 +2594,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmgi do
+  def _bmgi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2687,7 +2608,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmgbi do
+  def _bmgbi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -2701,7 +2622,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmgt120i do
+  def _bmgt120i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -2715,7 +2636,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmii do
+  def _bmii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -2729,7 +2650,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmri do
+  def _bmri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 11,
@@ -2743,7 +2664,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmrfi do
+  def _bmrfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2757,7 +2678,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmsi do
+  def _bmsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 10,
@@ -2771,7 +2692,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmti do
+  def _bmti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -2785,7 +2706,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bmui do
+  def _bmui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 11,
@@ -2799,7 +2720,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def boxi do
+  def _boxi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -2813,7 +2734,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bpii do
+  def _bpii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -2827,7 +2748,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bpli do
+  def _bpli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -9,
@@ -2841,7 +2762,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bpmi do
+  def _bpmi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 22,
@@ -2855,7 +2776,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bps6700iii do
+  def _bps6700iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -2869,7 +2790,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bpu10i do
+  def _bpu10i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2883,7 +2804,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bpu14i do
+  def _bpu14i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2897,7 +2818,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bpu1102i do
+  def _bpu1102i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2911,7 +2832,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bpuei do
+  def _bpuei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 22,
@@ -2925,7 +2846,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bpumi do
+  def _bpumi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2939,7 +2860,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsai do
+  def _bsai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -2953,7 +2874,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsa29i do
+  def _bsa29i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -2967,7 +2888,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsaai do
+  def _bsaai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -2981,7 +2902,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsabi do
+  def _bsabi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -2995,7 +2916,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsahi do
+  def _bsahi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -3009,7 +2930,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsaji do
+  def _bsaji do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3023,7 +2944,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsawi do
+  def _bsawi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3037,7 +2958,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsaxi do
+  def _bsaxi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -10,
@@ -3051,7 +2972,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsbi do
+  def _bsbi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -3065,7 +2986,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsc4i do
+  def _bsc4i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -3079,7 +3000,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bscai do
+  def _bscai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 9,
@@ -3093,7 +3014,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bscgi do
+  def _bscgi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -3107,7 +3028,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bscxi do
+  def _bscxi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -3121,7 +3042,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bse1i do
+  def _bse1i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -3135,7 +3056,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bse8i do
+  def _bse8i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -3149,7 +3070,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bse21i do
+  def _bse21i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -3163,7 +3084,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bse118i do
+  def _bse118i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3177,7 +3098,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bseai do
+  def _bseai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3191,7 +3112,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsebi do
+  def _bsebi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -3205,7 +3126,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bseci do
+  def _bseci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -3219,7 +3140,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsedi do
+  def _bsedi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3233,7 +3154,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bse3di do
+  def _bse3di do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -3247,7 +3168,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsegi do
+  def _bsegi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -3261,7 +3182,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bseji do
+  def _bseji do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -3275,7 +3196,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bseli do
+  def _bseli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -3289,7 +3210,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsemi do
+  def _bsemi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -3303,7 +3224,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsemii do
+  def _bsemii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 15,
@@ -3317,7 +3238,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bseni do
+  def _bseni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -3331,7 +3252,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsepi do
+  def _bsepi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3345,7 +3266,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bseri do
+  def _bseri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 16,
@@ -3359,7 +3280,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsesi do
+  def _bsesi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -3373,7 +3294,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsexi do
+  def _bsexi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 13,
@@ -3387,7 +3308,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsex3i do
+  def _bsex3i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3401,7 +3322,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bseyi do
+  def _bseyi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3415,7 +3336,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsgi do
+  def _bsgi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 22,
@@ -3429,7 +3350,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsh1236i do
+  def _bsh1236i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -3443,7 +3364,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsh1285i do
+  def _bsh1285i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -3457,7 +3378,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bshfi do
+  def _bshfi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -3471,7 +3392,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bshni do
+  def _bshni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3485,7 +3406,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bshti do
+  def _bshti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3499,7 +3420,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bshvi do
+  def _bshvi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -3513,7 +3434,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsii do
+  def _bsii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3527,7 +3448,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsiei do
+  def _bsiei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -3541,7 +3462,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsihkai do
+  def _bsihkai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -3555,7 +3476,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsihkci do
+  def _bsihkci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3569,7 +3490,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsisi do
+  def _bsisi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3583,7 +3504,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsiwi do
+  def _bsiwi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3597,7 +3518,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsiyi do
+  def _bsiyi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -3611,7 +3532,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsli do
+  def _bsli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -3625,7 +3546,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bslfi do
+  def _bslfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 15,
@@ -3639,7 +3560,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsmi do
+  def _bsmi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -3653,7 +3574,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsmai do
+  def _bsmai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -3667,7 +3588,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsmbi do
+  def _bsmbi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -3681,7 +3602,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsmfi do
+  def _bsmfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 15,
@@ -3695,7 +3616,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsni do
+  def _bsni do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -3709,7 +3630,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bso31i do
+  def _bso31i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -3723,7 +3644,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsobi do
+  def _bsobi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3737,7 +3658,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp13i do
+  def _bsp13i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3751,7 +3672,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp19i do
+  def _bsp19i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3765,7 +3686,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp24i do
+  def _bsp24i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -9,
@@ -3779,7 +3700,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp68i do
+  def _bsp68i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -3793,7 +3714,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp119i do
+  def _bsp119i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -3807,7 +3728,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp120i do
+  def _bsp120i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3821,7 +3742,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp143i do
+  def _bsp143i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -3835,7 +3756,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp460iii do
+  def _bsp460iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -3849,7 +3770,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp1286i do
+  def _bsp1286i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -3863,7 +3784,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp1407i do
+  def _bsp1407i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3877,7 +3798,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp1720i do
+  def _bsp1720i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -3891,7 +3812,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsp3004iv do
+  def _bsp3004iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -3905,7 +3826,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspaci do
+  def _bspaci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3919,7 +3840,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspani do
+  def _bspani do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -3933,7 +3854,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspcni do
+  def _bspcni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 14,
@@ -3947,7 +3868,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspdi do
+  def _bspdi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -3961,7 +3882,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspd6i do
+  def _bspd6i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 9,
@@ -3975,7 +3896,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspei do
+  def _bspei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -3989,7 +3910,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspfni do
+  def _bspfni do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -4003,7 +3924,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspgi do
+  def _bspgi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -4017,7 +3938,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsphi do
+  def _bsphi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4031,7 +3952,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspli do
+  def _bspli do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -4045,7 +3966,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsplu11i do
+  def _bsplu11i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4059,7 +3980,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspmi do
+  def _bspmi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 10,
@@ -4073,7 +3994,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspmii do
+  def _bspmii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4087,7 +4008,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspmai do
+  def _bspmai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -4101,7 +4022,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspnci do
+  def _bspnci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -4115,7 +4036,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspoi do
+  def _bspoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -4129,7 +4050,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsppi do
+  def _bsppi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 9,
@@ -4143,7 +4064,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspqi do
+  def _bspqi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -4157,7 +4078,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspti do
+  def _bspti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4171,7 +4092,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspt104i do
+  def _bspt104i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -4185,7 +4106,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bspt107i do
+  def _bspt107i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4199,7 +4120,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsptni do
+  def _bsptni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -4213,7 +4134,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsri do
+  def _bsri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -4227,7 +4148,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsrbi do
+  def _bsrbi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -4241,7 +4162,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsrdi do
+  def _bsrdi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -4255,7 +4176,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsrfi do
+  def _bsrfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4269,7 +4190,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsrgi do
+  def _bsrgi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4283,7 +4204,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bssai do
+  def _bssai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4297,7 +4218,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsseci do
+  def _bsseci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4311,7 +4232,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsshii do
+  def _bsshii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4325,7 +4246,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bssmi do
+  def _bssmi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -4339,7 +4260,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bssni do
+  def _bssni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -4353,7 +4274,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bssnai do
+  def _bssnai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -4367,7 +4288,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsssi do
+  def _bsssi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4381,7 +4302,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsst1i do
+  def _bsst1i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4395,7 +4316,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bst6i do
+  def _bst6i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -4409,7 +4330,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bst1107i do
+  def _bst1107i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -4423,7 +4344,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstaci do
+  def _bstaci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -4437,7 +4358,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstafi do
+  def _bstafi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4451,7 +4372,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstapi do
+  def _bstapi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -4465,7 +4386,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstaui do
+  def _bstaui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4479,7 +4400,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstbi do
+  def _bstbi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -4493,7 +4414,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bst2bi do
+  def _bst2bi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4507,7 +4428,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstbai do
+  def _bstbai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -4521,7 +4442,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bst4ci do
+  def _bst4ci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -4535,7 +4456,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstc8i do
+  def _bstc8i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -4549,7 +4470,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstdei do
+  def _bstdei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4563,7 +4484,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstdsi do
+  def _bstdsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4577,7 +4498,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsteii do
+  def _bsteii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4591,7 +4512,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsteni do
+  def _bsteni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -4605,7 +4526,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstf5i do
+  def _bstf5i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -4619,7 +4540,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstfni do
+  def _bstfni do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -4633,7 +4554,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsth2i do
+  def _bsth2i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -4647,7 +4568,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsthhi do
+  def _bsthhi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -4661,7 +4582,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstkti do
+  def _bstkti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -4675,7 +4596,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstmai do
+  def _bstmai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -4689,7 +4610,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstmbi do
+  def _bstmbi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -4703,7 +4624,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstmci do
+  def _bstmci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -4717,7 +4638,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstmwi do
+  def _bstmwi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -4731,7 +4652,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstni do
+  def _bstni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -4745,7 +4666,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstnsi do
+  def _bstnsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -4759,7 +4680,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstpi do
+  def _bstpi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4773,7 +4694,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstpai do
+  def _bstpai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -4787,7 +4708,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstsci do
+  def _bstsci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -4801,7 +4722,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstsfi do
+  def _bstsfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4815,7 +4736,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstsli do
+  def _bstsli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -4829,7 +4750,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstsni do
+  def _bstsni do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -4843,7 +4764,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstui do
+  def _bstui do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -4857,7 +4778,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bst2ui do
+  def _bst2ui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -4871,7 +4792,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstv1i do
+  def _bstv1i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 13,
@@ -4885,7 +4806,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstv2i do
+  def _bstv2i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -4899,7 +4820,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstxi do
+  def _bstxi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -4913,7 +4834,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstx2i do
+  def _bstx2i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4927,7 +4848,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstyi do
+  def _bstyi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4941,7 +4862,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstzi do
+  def _bstzi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -4955,7 +4876,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bstz17i do
+  def _bstz17i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -4969,7 +4890,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsui do
+  def _bsui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 12,
@@ -4983,7 +4904,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsu15i do
+  def _bsu15i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -4997,7 +4918,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsu36i do
+  def _bsu36i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -5011,7 +4932,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsuri do
+  def _bsuri do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -5025,7 +4946,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bsutui do
+  def _bsutui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -5039,7 +4960,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def btgi do
+  def _btgi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -5053,7 +4974,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def btgzi do
+  def _btgzi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 16,
@@ -5067,7 +4988,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bthci do
+  def _bthci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -5081,7 +5002,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def btri do
+  def _btri do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -5095,7 +5016,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def btsi do
+  def _btsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -5109,7 +5030,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def btsimuti do
+  def _btsimuti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -5123,7 +5044,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def btsci do
+  def _btsci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -5137,7 +5058,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def btumi do
+  def _btumi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -5151,7 +5072,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bvei do
+  def _bvei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 10,
@@ -5165,7 +5086,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def bve1b23i do
+  def _bve1b23i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5179,7 +5100,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cac8i do
+  def _cac8i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -5193,7 +5114,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def caii do
+  def _caii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -5207,7 +5128,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cal14237i do
+  def _cal14237i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5221,7 +5142,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def calb3ii do
+  def _calb3ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5235,7 +5156,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cauii do
+  def _cauii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -5249,7 +5170,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cau10061ii do
+  def _cau10061ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5263,7 +5184,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cba13ii do
+  def _cba13ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5277,7 +5198,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cba16038i do
+  def _cba16038i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5291,7 +5212,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cbo67071iv do
+  def _cbo67071iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5305,7 +5226,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cchii do
+  def _cchii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 17,
@@ -5319,7 +5240,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cchiii do
+  def _cchiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 26,
@@ -5333,7 +5254,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cch467iii do
+  def _cch467iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5347,7 +5268,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ccii do
+  def _ccii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -5361,7 +5282,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ccini do
+  def _ccini do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -5375,7 +5296,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cco11366vi do
+  def _cco11366vi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5389,7 +5310,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cco11437v do
+  def _cco11437v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5403,7 +5324,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cco14983v do
+  def _cco14983v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5417,7 +5338,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cco14983vi do
+  def _cco14983vi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5431,7 +5352,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ccrnaiii do
+  def _ccrnaiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5445,7 +5366,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cdii do
+  def _cdii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 4,
@@ -5459,7 +5380,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cdi11397i do
+  def _cdi11397i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5473,7 +5394,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cdi13746v do
+  def _cdi13746v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5487,7 +5408,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cdi13750iii do
+  def _cdi13750iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5501,7 +5422,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cdpi do
+  def _cdpi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 26,
@@ -5515,7 +5436,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cdu23823ii do
+  def _cdu23823ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5529,7 +5450,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cfa8380i do
+  def _cfa8380i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5543,7 +5464,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cfoi do
+  def _cfoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -5557,7 +5478,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cfri do
+  def _cfri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -5571,7 +5492,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cfr9i do
+  def _cfr9i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -5585,7 +5506,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cfr10i do
+  def _cfr10i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -5599,7 +5520,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cfr13i do
+  def _cfr13i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -5613,7 +5534,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cfr42i do
+  def _cfr42i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -5627,7 +5548,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cfrmh13ii do
+  def _cfrmh13ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5641,7 +5562,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cfrmh16vi do
+  def _cfrmh16vi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5655,7 +5576,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cfupf3ii do
+  def _cfupf3ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5669,7 +5590,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cgl13032i do
+  def _cgl13032i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5683,7 +5604,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cgl13032ii do
+  def _cgl13032ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5697,7 +5618,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def chai do
+  def _chai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -5711,7 +5632,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cin11811i do
+  def _cin11811i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5725,7 +5646,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cjei do
+  def _cjei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -9,
@@ -5739,7 +5660,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cje265v do
+  def _cje265v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5753,7 +5674,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cje54107iii do
+  def _cje54107iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5767,7 +5688,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cjefiii do
+  def _cjefiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5781,7 +5702,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cjefv do
+  def _cjefv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5795,7 +5716,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cjenii do
+  def _cjenii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5809,7 +5730,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cjeniii do
+  def _cjeniii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 25,
@@ -5823,7 +5744,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cjenv do
+  def _cjenv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5837,7 +5758,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cjepi do
+  def _cjepi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -8,
@@ -5851,7 +5772,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cjep659iv do
+  def _cjep659iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5865,7 +5786,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cjui do
+  def _cjui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5879,7 +5800,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cjuii do
+  def _cjuii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5893,7 +5814,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cko11077iv do
+  def _cko11077iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5907,7 +5828,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def clai do
+  def _clai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -5921,7 +5842,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cla11845iii do
+  def _cla11845iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5935,7 +5856,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cly7489ii do
+  def _cly7489ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5949,7 +5870,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cpe2837iii do
+  def _cpe2837iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5963,7 +5884,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cpe10578v do
+  def _cpe10578v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5977,7 +5898,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cpe13170ii do
+  def _cpe13170ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -5991,7 +5912,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cpoi do
+  def _cpoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -6005,7 +5926,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cre7908i do
+  def _cre7908i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6019,7 +5940,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def csa9238ii do
+  def _csa9238ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6033,7 +5954,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def csei do
+  def _csei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 10,
@@ -6047,7 +5968,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def csii do
+  def _csii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6061,7 +5982,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cspi do
+  def _cspi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -6075,7 +5996,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def csp6i do
+  def _csp6i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6089,7 +6010,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def csp2014i do
+  def _csp2014i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6103,7 +6024,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cspai do
+  def _cspai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6117,7 +6038,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cspbp25iii do
+  def _cspbp25iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6131,7 +6052,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cspci do
+  def _cspci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -12,
@@ -6145,7 +6066,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cspl61i do
+  def _cspl61i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6159,7 +6080,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cspx1ii do
+  def _cspx1ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6173,7 +6094,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cstmi do
+  def _cstmi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 26,
@@ -6187,7 +6108,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cviaii do
+  def _cviaii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6201,7 +6122,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cviji do
+  def _cviji do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -6215,7 +6136,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cviki_1 do
+  def _cviki_1 do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -6229,7 +6150,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cviqi do
+  def _cviqi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6243,7 +6164,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def cviri do
+  def _cviri do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -6257,7 +6178,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ddei do
+  def _ddei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6271,7 +6192,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def dde51507i do
+  def _dde51507i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6285,7 +6206,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def dini do
+  def _dini do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -6299,7 +6220,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def dpi3069i do
+  def _dpi3069i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6313,7 +6234,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def dpi3084i do
+  def _dpi3084i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6327,7 +6248,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def dpi3090ii do
+  def _dpi3090ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6341,7 +6262,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def dpni do
+  def _dpni do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -6355,7 +6276,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def dpnii do
+  def _dpnii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -6369,7 +6290,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def drai do
+  def _drai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -6383,7 +6304,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def draii do
+  def _draii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -6397,7 +6318,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def draiii do
+  def _draiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -6411,7 +6332,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def drari do
+  def _drari do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -6425,7 +6346,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def drdi do
+  def _drdi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -6439,7 +6360,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def drdii do
+  def _drdii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6453,7 +6374,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def drdiv do
+  def _drdiv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 26,
@@ -6467,7 +6388,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def drdv do
+  def _drdv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 17,
@@ -6481,7 +6402,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def drdvi do
+  def _drdvi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6495,7 +6416,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def drdviii do
+  def _drdviii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6509,7 +6430,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def drii do
+  def _drii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -6523,7 +6444,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def dsai do
+  def _dsai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6537,7 +6458,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def dsedi do
+  def _dsedi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -6551,7 +6472,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def dsps02ii do
+  def _dsps02ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6565,7 +6486,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def dvuiii do
+  def _dvuiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6579,7 +6500,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eaei do
+  def _eaei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6593,7 +6514,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eagi do
+  def _eagi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6607,7 +6528,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eam1104i do
+  def _eam1104i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -6621,7 +6542,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eam1105i do
+  def _eam1105i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -6635,7 +6556,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eari do
+  def _eari do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -6649,7 +6570,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecii do
+  def _ecii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 17,
@@ -6663,7 +6584,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecl136ii do
+  def _ecl136ii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -6677,7 +6598,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecl234i do
+  def _ecl234i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6691,7 +6612,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecl35734i do
+  def _ecl35734i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6705,7 +6626,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eclxi do
+  def _eclxi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6719,7 +6640,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco24i do
+  def _eco24i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -6733,7 +6654,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco31i do
+  def _eco31i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -6747,7 +6668,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco32i do
+  def _eco32i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -6761,7 +6682,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco47i do
+  def _eco47i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6775,7 +6696,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco47iii do
+  def _eco47iii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -6789,7 +6710,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco52i do
+  def _eco52i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6803,7 +6724,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco57i do
+  def _eco57i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 22,
@@ -6817,7 +6738,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco72i do
+  def _eco72i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -6831,7 +6752,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco81i do
+  def _eco81i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -6845,7 +6766,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco88i do
+  def _eco88i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6859,7 +6780,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco91i do
+  def _eco91i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6873,7 +6794,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco105i do
+  def _eco105i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -6887,7 +6808,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco130i do
+  def _eco130i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -6901,7 +6822,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco147i do
+  def _eco147i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -6915,7 +6836,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco4174i do
+  def _eco4174i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6929,7 +6850,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco4465ii do
+  def _eco4465ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6943,7 +6864,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco8164i do
+  def _eco8164i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6957,7 +6878,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco9009ii do
+  def _eco9009ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6971,7 +6892,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco9020i do
+  def _eco9020i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6985,7 +6906,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco9035i do
+  def _eco9035i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -6999,7 +6920,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco9699ii do
+  def _eco9699ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7013,7 +6934,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco43896ii do
+  def _eco43896ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7027,7 +6948,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecoblmcrx do
+  def _ecoblmcrx do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -7041,7 +6962,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecoe1140i do
+  def _ecoe1140i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7055,7 +6976,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecohi do
+  def _ecohi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -7069,7 +6990,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecohsi do
+  def _ecohsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7083,7 +7004,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecoicri do
+  def _ecoicri do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -7097,7 +7018,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco57mi do
+  def _eco57mi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 22,
@@ -7111,7 +7032,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecomvii do
+  def _ecomvii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7125,7 +7046,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def econi do
+  def _econi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -7139,7 +7060,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def econih6ii do
+  def _econih6ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7153,7 +7074,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecoo65i do
+  def _ecoo65i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -7167,7 +7088,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecoo109i do
+  def _ecoo109i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -7181,7 +7102,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecoo157si do
+  def _ecoo157si do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 15,
@@ -7195,7 +7116,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecori do
+  def _ecori do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -7209,7 +7130,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecorii do
+  def _ecorii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -7223,7 +7144,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecorv do
+  def _ecorv do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -7237,7 +7158,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecot14i do
+  def _ecot14i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -7251,7 +7172,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecot22i do
+  def _ecot22i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -7265,7 +7186,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ecot38i do
+  def _ecot38i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -7279,7 +7200,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eco53ki do
+  def _eco53ki do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -7293,7 +7214,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def egei do
+  def _egei do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -7307,7 +7228,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ehei do
+  def _ehei do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -7321,7 +7242,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ehi46392i do
+  def _ehi46392i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7335,7 +7256,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def eli8509ii do
+  def _eli8509ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7349,7 +7270,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def erhi do
+  def _erhi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -7363,7 +7284,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def erhg4t10i do
+  def _erhg4t10i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7377,7 +7298,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def esabc3i do
+  def _esabc3i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -7391,7 +7312,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def esassi do
+  def _esassi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7405,7 +7326,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def espi do
+  def _espi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -7419,7 +7340,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def esp3i do
+  def _esp3i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -7433,7 +7354,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def esp3007i do
+  def _esp3007i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7447,7 +7368,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def faei do
+  def _faei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -7461,7 +7382,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def faii do
+  def _faii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -7475,7 +7396,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fali do
+  def _fali do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -9,
@@ -7489,7 +7410,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def faqi do
+  def _faqi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 15,
@@ -7503,7 +7424,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fati do
+  def _fati do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -7517,7 +7438,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def faui do
+  def _faui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 9,
@@ -7531,7 +7452,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def faundi do
+  def _faundi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -7545,7 +7466,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fbai do
+  def _fbai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -7559,7 +7480,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fba202z8ii do
+  def _fba202z8ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7573,7 +7494,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fbli do
+  def _fbli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -7587,7 +7508,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fco1691iv do
+  def _fco1691iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7601,7 +7522,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fini do
+  def _fini do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7615,7 +7536,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fmui do
+  def _fmui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -7629,7 +7550,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fna13121i do
+  def _fna13121i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7643,7 +7564,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fnu11326ii do
+  def _fnu11326ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7657,7 +7578,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fnu11326iv do
+  def _fnu11326iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7671,7 +7592,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fnudii do
+  def _fnudii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -7685,7 +7606,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fnu4hi do
+  def _fnu4hi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -7699,7 +7620,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def foki do
+  def _foki do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 14,
@@ -7713,7 +7634,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def frioi do
+  def _frioi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -7727,7 +7648,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fsei do
+  def _fsei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -7741,7 +7662,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fspi do
+  def _fspi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -7755,7 +7676,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fspai do
+  def _fspai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 4,
@@ -7769,7 +7690,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fspbi do
+  def _fspbi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -7783,7 +7704,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fspei do
+  def _fspei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 14,
@@ -7797,7 +7718,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fsp4hi do
+  def _fsp4hi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -7811,7 +7732,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def fsppk15i do
+  def _fsppk15i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7825,7 +7746,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ftnuv do
+  def _ftnuv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7839,7 +7760,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def gaut27i do
+  def _gaut27i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7853,7 +7774,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def gba708ii do
+  def _gba708ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7867,7 +7788,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def gdiii do
+  def _gdiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -7881,7 +7802,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def glai do
+  def _glai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -7895,7 +7816,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def glui do
+  def _glui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -7909,7 +7830,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def gru56503ii do
+  def _gru56503ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7923,7 +7844,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def gsai do
+  def _gsai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -7937,7 +7858,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def gsui do
+  def _gsui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 22,
@@ -7951,7 +7872,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def gsupi do
+  def _gsupi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -7965,7 +7886,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def haei do
+  def _haei do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -7979,7 +7900,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def haeii do
+  def _haeii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -7993,7 +7914,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def haeiii do
+  def _haeiii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -8007,7 +7928,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def haeiv do
+  def _haeiv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -8,
@@ -8021,7 +7942,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hapii do
+  def _hapii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8035,7 +7956,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hauii do
+  def _hauii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 17,
@@ -8049,7 +7970,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hbaii do
+  def _hbaii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8063,7 +7984,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hca13221v do
+  def _hca13221v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8077,7 +7998,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hdeny26i do
+  def _hdeny26i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8091,7 +8012,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hdeza17i do
+  def _hdeza17i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8105,7 +8026,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hgai do
+  def _hgai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 10,
@@ -8119,7 +8040,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hgiai do
+  def _hgiai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -8133,7 +8054,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hgici do
+  def _hgici do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8147,7 +8068,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hgieii do
+  def _hgieii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8161,7 +8082,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hgijii do
+  def _hgijii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -8175,7 +8096,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hhai do
+  def _hhai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -8189,7 +8110,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hin1i do
+  def _hin1i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -8203,7 +8124,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hin1ii do
+  def _hin1ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -8217,7 +8138,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hin4i do
+  def _hin4i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -9,
@@ -8231,7 +8152,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hin4ii do
+  def _hin4ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 11,
@@ -8245,7 +8166,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hin6i do
+  def _hin6i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8259,7 +8180,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hinp1i do
+  def _hinp1i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8273,7 +8194,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hincii do
+  def _hincii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -8287,7 +8208,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hindii do
+  def _hindii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -8301,7 +8222,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hindiii do
+  def _hindiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8315,7 +8236,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hinfi do
+  def _hinfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8329,7 +8250,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpai do
+  def _hpai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -8343,7 +8264,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpaii do
+  def _hpaii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8357,7 +8278,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hphi do
+  def _hphi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 13,
@@ -8371,7 +8292,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpy8i do
+  def _hpy8i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -8385,7 +8306,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpy99i do
+  def _hpy99i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -8399,7 +8320,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpy99xiii do
+  def _hpy99xiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8413,7 +8334,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpy99xiv do
+  def _hpy99xiv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8427,7 +8348,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpy99xiv_mut1 do
+  def _hpy99xiv_mut1 do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8441,7 +8362,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpy99xxii do
+  def _hpy99xxii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8455,7 +8376,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpy166ii do
+  def _hpy166ii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -8469,7 +8390,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpy178iii do
+  def _hpy178iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -8483,7 +8404,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpy188i do
+  def _hpy188i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -8497,7 +8418,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpy188iii do
+  def _hpy188iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -8511,7 +8432,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpy300xi do
+  def _hpy300xi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8525,7 +8446,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyav do
+  def _hpyav do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 11,
@@ -8539,7 +8460,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyaxiv do
+  def _hpyaxiv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8553,7 +8474,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyaxvi_mut1 do
+  def _hpyaxvi_mut1 do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8567,7 +8488,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyaxvi_mut2 do
+  def _hpyaxvi_mut2 do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8581,7 +8502,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyaxviii do
+  def _hpyaxviii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8595,7 +8516,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyas001vi do
+  def _hpyas001vi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8609,7 +8530,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpych4iii do
+  def _hpych4iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -8623,7 +8544,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpych4iv do
+  def _hpych4iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8637,7 +8558,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpych4v do
+  def _hpych4v do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -8651,7 +8572,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyf3i do
+  def _hpyf3i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8665,7 +8586,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyf10vi do
+  def _hpyf10vi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -8679,7 +8600,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyg272xv do
+  def _hpyg272xv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8693,7 +8614,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpylim6xii do
+  def _hpylim6xii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8707,7 +8628,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpypu007xix do
+  def _hpypu007xix do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8721,7 +8642,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyse526i do
+  def _hpyse526i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8735,7 +8656,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyum032xiii do
+  def _hpyum032xiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8749,7 +8670,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyum032xiii_mut1 do
+  def _hpyum032xiii_mut1 do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8763,7 +8684,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hpyum032xiv do
+  def _hpyum032xiv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8777,7 +8698,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hsoii do
+  def _hsoii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -9,
@@ -8791,7 +8712,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hso63250iv do
+  def _hso63250iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8805,7 +8726,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hso63373iii do
+  def _hso63373iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8819,7 +8740,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hsp92i do
+  def _hsp92i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -8833,7 +8754,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hsp92ii do
+  def _hsp92ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -8847,7 +8768,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hspai do
+  def _hspai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8861,7 +8782,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def hspmhr1ii do
+  def _hspmhr1ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8875,7 +8796,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def jma19592i do
+  def _jma19592i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8889,7 +8810,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def jma19592ii do
+  def _jma19592ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8903,7 +8824,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def jsp2502ii do
+  def _jsp2502ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8917,7 +8838,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kasi do
+  def _kasi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -8931,7 +8852,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kas9737iii do
+  def _kas9737iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8945,7 +8866,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kfli do
+  def _kfli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -8959,7 +8880,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kor51ii do
+  def _kor51ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -8973,7 +8894,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kpni do
+  def _kpni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -8987,7 +8908,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kpn2i do
+  def _kpn2i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -9001,7 +8922,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kpn156v do
+  def _kpn156v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9015,7 +8936,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kpn327i do
+  def _kpn327i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9029,7 +8950,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kpn9178i do
+  def _kpn9178i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9043,7 +8964,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kpn9644ii do
+  def _kpn9644ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9057,7 +8978,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kpnnh25iii do
+  def _kpnnh25iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9071,7 +8992,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kpnnih30iii do
+  def _kpnnih30iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9085,7 +9006,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kpnnih50i do
+  def _kpnnih50i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9099,7 +9020,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kroi do
+  def _kroi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -9113,7 +9034,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kro7512ii do
+  def _kro7512ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9127,7 +9048,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kroni do
+  def _kroni do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -9141,7 +9062,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kspi do
+  def _kspi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -9155,7 +9076,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ksp22i do
+  def _ksp22i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -9169,7 +9090,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ksp632i do
+  def _ksp632i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -9183,7 +9104,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kspai do
+  def _kspai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -9197,7 +9118,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def kzo9i do
+  def _kzo9i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -9211,7 +9132,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lba2029iii do
+  def _lba2029iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9225,7 +9146,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lbr124ii do
+  def _lbr124ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9239,7 +9160,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lcr047i do
+  def _lcr047i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9253,7 +9174,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lcr047ii do
+  def _lcr047ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9267,7 +9188,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lde4408ii do
+  def _lde4408ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9281,7 +9202,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lgui do
+  def _lgui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -9295,7 +9216,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def llag50i do
+  def _llag50i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9309,7 +9230,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lme32i do
+  def _lme32i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9323,7 +9244,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lmni do
+  def _lmni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -9337,7 +9258,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lmo370i do
+  def _lmo370i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9351,7 +9272,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lmo911ii do
+  def _lmo911ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9365,7 +9286,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lpl1004ii do
+  def _lpl1004ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9379,7 +9300,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lpni do
+  def _lpni do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -9393,7 +9314,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lpn11417ii do
+  def _lpn11417ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9407,7 +9328,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lpn12272i do
+  def _lpn12272i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9421,7 +9342,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lpnpi do
+  def _lpnpi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 14,
@@ -9435,7 +9356,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lra68i do
+  def _lra68i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9449,7 +9370,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lsads4i do
+  def _lsads4i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9463,7 +9384,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lsp48iii do
+  def _lsp48iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9477,7 +9398,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lsp1109i do
+  def _lsp1109i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 13,
@@ -9491,7 +9412,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lsp6406vi do
+  def _lsp6406vi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9505,7 +9426,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def lwei do
+  def _lwei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 10,
@@ -9519,7 +9440,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mabi do
+  def _mabi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -9533,7 +9454,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def maei do
+  def _maei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -9547,7 +9468,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def maeii do
+  def _maeii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -9561,7 +9482,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def maeiii do
+  def _maeiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -9575,7 +9496,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mali do
+  def _mali do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -9589,7 +9510,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def maqi do
+  def _maqi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 28,
@@ -9603,7 +9524,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def maubi do
+  def _maubi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -9617,7 +9538,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mba11i do
+  def _mba11i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9631,7 +9552,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mbii do
+  def _mbii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -9645,7 +9566,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mboi do
+  def _mboi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -9659,7 +9580,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mboii do
+  def _mboii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 13,
@@ -9673,7 +9594,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mcati do
+  def _mcati do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -9687,7 +9608,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mch946ii do
+  def _mch946ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9701,7 +9622,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mch10819i do
+  def _mch10819i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9715,7 +9636,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mcri do
+  def _mcri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -9729,7 +9650,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mfei do
+  def _mfei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -9743,7 +9664,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mfli do
+  def _mfli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -9757,7 +9678,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mhli do
+  def _mhli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -9771,7 +9692,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mjaiv do
+  def _mjaiv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9785,7 +9706,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mkadii do
+  def _mkadii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9799,7 +9720,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mla10359i do
+  def _mla10359i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9813,7 +9734,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mlsi do
+  def _mlsi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -9827,7 +9748,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mlui do
+  def _mlui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -9841,7 +9762,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mlu211iii do
+  def _mlu211iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -9855,7 +9776,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mluci do
+  def _mluci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -9869,7 +9790,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mluni do
+  def _mluni do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -9883,7 +9804,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mlyi do
+  def _mlyi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 10,
@@ -9897,7 +9818,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mly113i do
+  def _mly113i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -9911,7 +9832,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mmei do
+  def _mmei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 26,
@@ -9925,7 +9846,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mnli do
+  def _mnli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 11,
@@ -9939,7 +9860,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mox20i do
+  def _mox20i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -9953,7 +9874,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mph1103i do
+  def _mph1103i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -9967,7 +9888,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mrei do
+  def _mrei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -9981,7 +9902,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mroi do
+  def _mroi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -9995,7 +9916,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mroni do
+  def _mroni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -10009,7 +9930,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mroxi do
+  def _mroxi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -10023,7 +9944,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def msci do
+  def _msci do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -10037,7 +9958,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def msei do
+  def _msei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -10051,7 +9972,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def msli do
+  def _msli do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -10065,7 +9986,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mspi do
+  def _mspi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -10079,7 +10000,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def msp20i do
+  def _msp20i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -10093,7 +10014,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mspa1i do
+  def _mspa1i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -10107,7 +10028,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mspci do
+  def _mspci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -10121,7 +10042,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mspf392i do
+  def _mspf392i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10135,7 +10056,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mspgi do
+  def _mspgi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -10149,7 +10070,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mspi7ii do
+  def _mspi7ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10163,7 +10084,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mspi7iv do
+  def _mspi7iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10177,7 +10098,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mspji do
+  def _mspji do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 13,
@@ -10191,7 +10112,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mspr9i do
+  def _mspr9i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -10205,7 +10126,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mspsc27ii do
+  def _mspsc27ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10219,7 +10140,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mssi do
+  def _mssi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 4,
@@ -10233,7 +10154,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def msti do
+  def _msti do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -10247,7 +10168,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mtei do
+  def _mtei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -10261,7 +10182,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mtuhn878ii do
+  def _mtuhn878ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10275,7 +10196,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def muni do
+  def _muni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -10289,7 +10210,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mvai do
+  def _mvai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -10303,7 +10224,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mva1269i do
+  def _mva1269i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -10317,7 +10238,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mvni do
+  def _mvni do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -10331,7 +10252,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def mwoi do
+  def _mwoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -10345,7 +10266,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def naei do
+  def _naei do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -10359,7 +10280,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nal45188ii do
+  def _nal45188ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10373,7 +10294,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nan12227i do
+  def _nan12227i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10387,7 +10308,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nari do
+  def _nari do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -10401,7 +10322,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nbr128ii do
+  def _nbr128ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10415,7 +10336,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ncii do
+  def _ncii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -10429,7 +10350,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ncoi do
+  def _ncoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -10443,7 +10364,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ndei do
+  def _ndei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -10457,7 +10378,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ndeii do
+  def _ndeii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -10471,7 +10392,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ngoavii do
+  def _ngoavii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 12,
@@ -10485,7 +10406,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ngoaviii do
+  def _ngoaviii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -13,
@@ -10499,7 +10420,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ngomiv do
+  def _ngomiv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -10513,7 +10434,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nhaxi do
+  def _nhaxi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10527,7 +10448,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nhei do
+  def _nhei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -10541,7 +10462,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nhoi do
+  def _nhoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10555,7 +10476,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nlaiii do
+  def _nlaiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -10569,7 +10490,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nlaiv do
+  def _nlaiv do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -10583,7 +10504,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nlaci do
+  def _nlaci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 25,
@@ -10597,7 +10518,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nli3877i do
+  def _nli3877i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -10611,7 +10532,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nmeaiii do
+  def _nmeaiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -10625,7 +10546,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nmea6ciii do
+  def _nmea6ciii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -10639,7 +10560,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nmedi do
+  def _nmedi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -13,
@@ -10653,7 +10574,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nmuci do
+  def _nmuci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -10667,7 +10588,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def noti do
+  def _noti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -10681,7 +10602,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def npeus61ii do
+  def _npeus61ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10695,7 +10616,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nrui do
+  def _nrui do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -10709,7 +10630,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nsbi do
+  def _nsbi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -10723,7 +10644,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nsii do
+  def _nsii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -10737,7 +10658,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nspi do
+  def _nspi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -10751,7 +10672,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nspv do
+  def _nspv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -10765,7 +10686,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nspbii do
+  def _nspbii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -10779,7 +10700,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def nspes21ii do
+  def _nspes21ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10793,7 +10714,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def obabs10i do
+  def _obabs10i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10807,7 +10728,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ogri do
+  def _ogri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10821,7 +10742,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def olii do
+  def _olii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -10835,7 +10756,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def osphl35iii do
+  def _osphl35iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10849,7 +10770,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pabi do
+  def _pabi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -10863,7 +10784,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def paci do
+  def _paci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -10877,7 +10798,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def paciii do
+  def _paciii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10891,7 +10812,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pac19842ii do
+  def _pac19842ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10905,7 +10826,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def paei do
+  def _paei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -10919,7 +10840,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pae8506i do
+  def _pae8506i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10933,7 +10854,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pae10662iii do
+  def _pae10662iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10947,7 +10868,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def paepa99iii do
+  def _paepa99iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -10961,7 +10882,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def paer7i do
+  def _paer7i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -10975,7 +10896,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pagi do
+  def _pagi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -10989,7 +10910,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pal408i do
+  def _pal408i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11003,7 +10924,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def palai do
+  def _palai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -11017,7 +10938,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def paqci do
+  def _paqci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 11,
@@ -11031,7 +10952,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pasi do
+  def _pasi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -11045,7 +10966,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def paui do
+  def _paui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -11059,7 +10980,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pba2294i do
+  def _pba2294i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11073,7 +10994,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pbu13063ii do
+  def _pbu13063ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11087,7 +11008,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pcaii do
+  def _pcaii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11101,7 +11022,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pcei do
+  def _pcei do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -11115,7 +11036,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pcii do
+  def _pcii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -11129,7 +11050,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pcisi do
+  def _pcisi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -11143,7 +11064,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pcr308ii do
+  def _pcr308ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11157,7 +11078,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pcsi do
+  def _pcsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -11171,7 +11092,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pcti do
+  def _pcti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -11185,7 +11106,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pdii do
+  def _pdii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -11199,7 +11120,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pdi8503iii do
+  def _pdi8503iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11213,7 +11134,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pdmi do
+  def _pdmi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -11227,7 +11148,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pdu1735i do
+  def _pdu1735i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11241,7 +11162,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def peni do
+  def _peni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11255,7 +11176,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pfei do
+  def _pfei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -11269,7 +11190,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pfl23ii do
+  def _pfl23ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -11283,7 +11204,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pfl1108i do
+  def _pfl1108i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11297,7 +11218,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pfl3756ii do
+  def _pfl3756ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11311,7 +11232,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pfl8569i do
+  def _pfl8569i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -11325,7 +11246,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pfl10783ii do
+  def _pfl10783ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11339,7 +11260,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pflfi do
+  def _pflfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -11353,7 +11274,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pflmi do
+  def _pflmi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -11367,7 +11288,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pflpt14i do
+  def _pflpt14i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11381,7 +11302,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pfoi do
+  def _pfoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -11395,7 +11316,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pfrjs12iv do
+  def _pfrjs12iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11409,7 +11330,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pfrjs12v do
+  def _pfrjs12v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11423,7 +11344,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pfrjs15iii do
+  def _pfrjs15iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11437,7 +11358,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pgap73iii do
+  def _pgap73iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11451,7 +11372,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pinai do
+  def _pinai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -11465,7 +11386,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pin17fiii do
+  def _pin17fiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11479,7 +11400,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pinp23ii do
+  def _pinp23ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11493,7 +11414,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pinp59iii do
+  def _pinp59iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11507,7 +11428,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pkri do
+  def _pkri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -11521,7 +11442,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pladi do
+  def _pladi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -11535,7 +11456,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def plei do
+  def _plei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 9,
@@ -11549,7 +11470,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ple19i do
+  def _ple19i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -11563,7 +11484,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def plimi do
+  def _plimi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11577,7 +11498,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pluti do
+  def _pluti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -11591,7 +11512,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pmaci do
+  def _pmaci do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -11605,7 +11526,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pmei do
+  def _pmei do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 4,
@@ -11619,7 +11540,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pme10899i do
+  def _pme10899i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11633,7 +11554,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pmli do
+  def _pmli do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -11647,7 +11568,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ppii do
+  def _ppii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -8,
@@ -11661,7 +11582,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ppip13ii do
+  def _ppip13ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11675,7 +11596,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ppsi do
+  def _ppsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 9,
@@ -11689,7 +11610,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ppu10i do
+  def _ppu10i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -11703,7 +11624,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ppu21i do
+  def _ppu21i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -11717,7 +11638,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ppumi do
+  def _ppumi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -11731,7 +11652,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pru8113i do
+  def _pru8113i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11745,7 +11666,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psci do
+  def _psci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -11759,7 +11680,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pse18267i do
+  def _pse18267i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11773,7 +11694,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pshai do
+  def _pshai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -11787,7 +11708,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pshbi do
+  def _pshbi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -11801,7 +11722,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psii do
+  def _psii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -11815,7 +11736,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psp03i do
+  def _psp03i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -11829,7 +11750,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psp5ii do
+  def _psp5ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -11843,7 +11764,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psp6i do
+  def _psp6i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -11857,7 +11778,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psp0357ii do
+  def _psp0357ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11871,7 +11792,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psp1406i do
+  def _psp1406i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -11885,7 +11806,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspat13iii do
+  def _pspat13iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11899,7 +11820,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psp124bi do
+  def _psp124bi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -11913,7 +11834,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspci do
+  def _pspci do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -11927,7 +11848,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspd7dii do
+  def _pspd7dii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -11941,7 +11862,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspei do
+  def _pspei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -11955,7 +11876,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspfi do
+  def _pspfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -11969,7 +11890,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspgi do
+  def _pspgi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -11983,7 +11904,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspli do
+  def _pspli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -11997,7 +11918,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspmr102ii do
+  def _pspmr102ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12011,7 +11932,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspn4i do
+  def _pspn4i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -12025,7 +11946,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspomi do
+  def _pspomi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -12039,7 +11960,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspomii do
+  def _pspomii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -12053,7 +11974,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psppi do
+  def _psppi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -12067,7 +11988,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspppi do
+  def _pspppi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -12081,7 +12002,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psppri do
+  def _psppri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 21,
@@ -12095,7 +12016,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspr84i do
+  def _pspr84i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12109,7 +12030,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pspxi do
+  def _pspxi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -12123,7 +12044,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psri do
+  def _psri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -8,
@@ -12137,7 +12058,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pssi do
+  def _pssi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -12151,7 +12072,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psti do
+  def _psti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -12165,7 +12086,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pst145i do
+  def _pst145i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12179,7 +12100,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pst273i do
+  def _pst273i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12193,7 +12114,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pst14472i do
+  def _pst14472i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12207,7 +12128,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pstni do
+  def _pstni do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -12221,7 +12142,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psui do
+  def _psui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -12235,7 +12156,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psugi do
+  def _psugi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12249,7 +12170,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def psyi do
+  def _psyi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -12263,7 +12184,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ptei do
+  def _ptei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -12277,7 +12198,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pvui do
+  def _pvui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -12291,7 +12212,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def pvuii do
+  def _pvuii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -12305,7 +12226,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ran11014iv do
+  def _ran11014iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12319,7 +12240,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rba2021i do
+  def _rba2021i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12333,7 +12254,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rcei do
+  def _rcei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -12347,7 +12268,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rdegbi do
+  def _rdegbi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12361,7 +12282,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rdegbii do
+  def _rdegbii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 26,
@@ -12375,7 +12296,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rdegbiii do
+  def _rdegbiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -10,
@@ -12389,7 +12310,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rer8036ii do
+  def _rer8036ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12403,7 +12324,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rflfiii do
+  def _rflfiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12417,7 +12338,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rgai do
+  def _rgai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -12431,7 +12352,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rgo13296iv do
+  def _rgo13296iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12445,7 +12366,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rho5650i do
+  def _rho5650i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12459,7 +12380,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rigi do
+  def _rigi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -12473,7 +12394,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rkr11038i do
+  def _rkr11038i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12487,7 +12408,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rlai do
+  def _rlai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12501,7 +12422,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rlaii do
+  def _rlaii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 26,
@@ -12515,7 +12436,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rleai do
+  def _rleai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 18,
@@ -12529,7 +12450,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rmu369iii do
+  def _rmu369iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12543,7 +12464,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rpai do
+  def _rpai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 18,
@@ -12557,7 +12478,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rpabi do
+  def _rpabi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -12571,7 +12492,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rpab5i do
+  def _rpab5i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -12585,7 +12506,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rpati do
+  def _rpati do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12599,7 +12520,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rrui do
+  def _rrui do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -12613,7 +12534,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rsai do
+  def _rsai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -12627,7 +12548,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rsani do
+  def _rsani do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -12641,7 +12562,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rsei do
+  def _rsei do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -12655,7 +12576,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rsp008iv do
+  def _rsp008iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12669,7 +12590,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rsp008v do
+  def _rsp008v do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12683,7 +12604,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rsp531ii do
+  def _rsp531ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12697,7 +12618,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rsppbts2iii do
+  def _rsppbts2iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12711,7 +12632,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rsrii do
+  def _rsrii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -12725,7 +12646,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rsr2i do
+  def _rsr2i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -12739,7 +12660,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def rtr1953i do
+  def _rtr1953i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12753,7 +12674,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def saci do
+  def _saci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -12767,7 +12688,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sacii do
+  def _sacii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -12781,7 +12702,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def saf8902iii do
+  def _saf8902iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12795,7 +12716,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sag901i do
+  def _sag901i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12809,7 +12730,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sali do
+  def _sali do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -12823,7 +12744,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sandi do
+  def _sandi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -12837,7 +12758,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sapi do
+  def _sapi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -12851,7 +12772,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def saqai do
+  def _saqai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -12865,7 +12786,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sati do
+  def _sati do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -12879,7 +12800,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def saui do
+  def _saui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -12893,7 +12814,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sau96i do
+  def _sau96i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -12907,7 +12828,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sau1803iii do
+  def _sau1803iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12921,7 +12842,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sau5656ii do
+  def _sau5656ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12935,7 +12856,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sau64037iv do
+  def _sau64037iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12949,7 +12870,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sau3ai do
+  def _sau3ai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -12963,7 +12884,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def saumj015iii do
+  def _saumj015iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12977,7 +12898,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sba460ii do
+  def _sba460ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -12991,7 +12912,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sbfi do
+  def _sbfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -13005,7 +12926,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sbo46i do
+  def _sbo46i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13019,7 +12940,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def scai do
+  def _scai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -13033,7 +12954,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def schi do
+  def _schi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 10,
@@ -13047,7 +12968,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def scii do
+  def _scii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -13061,7 +12982,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def scods2ii do
+  def _scods2ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13075,7 +12996,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def scrfi do
+  def _scrfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -13089,7 +13010,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sdai do
+  def _sdai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -13103,7 +13024,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sdeai do
+  def _sdeai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -13117,7 +13038,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sdeosi do
+  def _sdeosi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -12,
@@ -13131,7 +13052,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sdui do
+  def _sdui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -13145,7 +13066,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sdy5370i do
+  def _sdy5370i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13159,7 +13080,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sdy7136i do
+  def _sdy7136i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13173,7 +13094,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sdy9603i do
+  def _sdy9603i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13187,7 +13108,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def seci do
+  def _seci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -13201,7 +13122,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def seli do
+  def _seli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -13215,7 +13136,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sen5794iii do
+  def _sen5794iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13229,7 +13150,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sen6480iv do
+  def _sen6480iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13243,7 +13164,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sen17963iii do
+  def _sen17963iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13257,7 +13178,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sena1673iii do
+  def _sena1673iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13271,7 +13192,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sensara26iii do
+  def _sensara26iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13285,7 +13206,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sentfiv do
+  def _sentfiv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13299,7 +13220,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sep11964i do
+  def _sep11964i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13313,7 +13234,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def seq11824i do
+  def _seq11824i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13327,7 +13248,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def seti do
+  def _seti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -13341,7 +13262,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sexai do
+  def _sexai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -13355,7 +13276,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sfaai do
+  def _sfaai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -13369,7 +13290,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sfani do
+  def _sfani do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 10,
@@ -13383,7 +13304,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sfci do
+  def _sfci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -13397,7 +13318,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sfei do
+  def _sfei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -13411,7 +13332,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sfii do
+  def _sfii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -13425,7 +13346,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sfl13829iii do
+  def _sfl13829iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13439,7 +13360,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sfoi do
+  def _sfoi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -13453,7 +13374,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sfr274i do
+  def _sfr274i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -13467,7 +13388,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sfr303i do
+  def _sfr303i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -13481,7 +13402,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sfui do
+  def _sfui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -13495,7 +13416,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sgei do
+  def _sgei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 13,
@@ -13509,7 +13430,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sgfi do
+  def _sgfi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -13523,7 +13444,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sgr7807i do
+  def _sgr7807i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13537,7 +13458,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sgrai do
+  def _sgrai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -13551,7 +13472,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sgraii do
+  def _sgraii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13565,7 +13486,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sgrbi do
+  def _sgrbi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -13579,7 +13500,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sgrdi do
+  def _sgrdi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -13593,7 +13514,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sgrti do
+  def _sgrti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 14,
@@ -13607,7 +13528,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sgsi do
+  def _sgsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -13621,7 +13542,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def simi do
+  def _simi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -13635,7 +13556,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sini do
+  def _sini do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -13649,7 +13570,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def slai do
+  def _slai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -13663,7 +13584,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def smai do
+  def _smai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -13677,7 +13598,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sma325i do
+  def _sma325i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13691,7 +13612,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sma10259ii do
+  def _sma10259ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13705,7 +13626,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def smaumh5i do
+  def _smaumh5i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13719,7 +13640,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def smaumh8i do
+  def _smaumh8i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13733,7 +13654,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def smii do
+  def _smii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 4,
@@ -13747,7 +13668,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def smimi do
+  def _smimi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -13761,7 +13682,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def smli do
+  def _smli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -13775,7 +13696,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def smoi do
+  def _smoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -13789,7 +13710,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def snai do
+  def _snai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13803,7 +13724,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sna507viii do
+  def _sna507viii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13817,7 +13738,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def snabi do
+  def _snabi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -13831,7 +13752,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sno506i do
+  def _sno506i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13845,7 +13766,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def spei do
+  def _spei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -13859,7 +13780,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def spe19205iv do
+  def _spe19205iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13873,7 +13794,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sphi do
+  def _sphi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -13887,7 +13808,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def spli do
+  def _spli do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -13901,7 +13822,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def spnrii do
+  def _spnrii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13915,7 +13836,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def spodi do
+  def _spodi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -13929,7 +13850,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def srfi do
+  def _srfi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 4,
@@ -13943,7 +13864,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sse9i do
+  def _sse9i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -13957,7 +13878,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sse232i do
+  def _sse232i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -13971,7 +13892,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sse8387i do
+  def _sse8387i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 6,
@@ -13985,7 +13906,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sse8647i do
+  def _sse8647i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -13999,7 +13920,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ssebi do
+  def _ssebi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -14013,7 +13934,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ssii do
+  def _ssii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14027,7 +13948,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sspi do
+  def _sspi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -14041,7 +13962,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ssp714ii do
+  def _ssp714ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14055,7 +13976,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ssp6803iv do
+  def _ssp6803iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14069,7 +13990,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sspdi do
+  def _sspdi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14083,7 +14004,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sspd5i do
+  def _sspd5i do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 13,
@@ -14097,7 +14018,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sspjor1ii do
+  def _sspjor1ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14111,7 +14032,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sspmi do
+  def _sspmi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14125,7 +14046,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ssti do
+  def _ssti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -14139,7 +14060,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sste37i do
+  def _sste37i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -14153,7 +14074,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sth132i do
+  def _sth132i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -14167,7 +14088,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sth302ii do
+  def _sth302ii do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -14181,7 +14102,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sth20745iii do
+  def _sth20745iii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14195,7 +14116,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sthst3ii do
+  def _sthst3ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14209,7 +14130,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def stsi do
+  def _stsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 15,
@@ -14223,7 +14144,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def stui do
+  def _stui do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -14237,7 +14158,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def styi do
+  def _styi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14251,7 +14172,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def styd4i do
+  def _styd4i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -14265,7 +14186,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def surp32aii do
+  def _surp32aii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14279,7 +14200,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def swai do
+  def _swai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 4,
@@ -14293,7 +14214,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def sxy1780i do
+  def _sxy1780i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14307,7 +14228,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def taai do
+  def _taai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -14321,7 +14242,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tagi do
+  def _tagi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 2,
@@ -14335,7 +14256,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def taii do
+  def _taii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -14349,7 +14270,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def taqi do
+  def _taqi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14363,7 +14284,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def taqii do
+  def _taqii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 17,
@@ -14377,7 +14298,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def taqiii do
+  def _taqiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 17,
@@ -14391,7 +14312,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tasi do
+  def _tasi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -14405,7 +14326,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tati do
+  def _tati do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14419,7 +14340,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def taui do
+  def _taui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -14433,7 +14354,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tfii do
+  def _tfii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14447,7 +14368,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tkoi do
+  def _tkoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 26,
@@ -14461,7 +14382,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tkoii do
+  def _tkoii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 16,
@@ -14475,7 +14396,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tpytp2i do
+  def _tpytp2i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14489,7 +14410,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tru1i do
+  def _tru1i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14503,7 +14424,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tru9i do
+  def _tru9i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14517,7 +14438,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tscai do
+  def _tscai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -14531,7 +14452,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tsei do
+  def _tsei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14545,7 +14466,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tsefi do
+  def _tsefi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -14559,7 +14480,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tsoi do
+  def _tsoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 17,
@@ -14573,7 +14494,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tsp45i do
+  def _tsp45i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -14587,7 +14508,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tsparh3i do
+  def _tsparh3i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14601,7 +14522,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tsp4ci do
+  def _tsp4ci do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 3,
@@ -14615,7 +14536,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tspdti do
+  def _tspdti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 16,
@@ -14629,7 +14550,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tspei do
+  def _tspei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -14643,7 +14564,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tspgwi do
+  def _tspgwi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 16,
@@ -14657,7 +14578,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tspmi do
+  def _tspmi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14671,7 +14592,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tspri do
+  def _tspri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -14685,7 +14606,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tssi do
+  def _tssi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14699,7 +14620,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tsti do
+  def _tsti do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -9,
@@ -14713,7 +14634,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tsui do
+  def _tsui do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14727,7 +14648,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tth111i do
+  def _tth111i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 4,
@@ -14741,7 +14662,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def tth111ii do
+  def _tth111ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 17,
@@ -14755,7 +14676,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ubaf9i do
+  def _ubaf9i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14769,7 +14690,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ubaf11i do
+  def _ubaf11i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14783,7 +14704,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ubaf12i do
+  def _ubaf12i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14797,7 +14718,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ubaf13i do
+  def _ubaf13i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14811,7 +14732,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ubaf14i do
+  def _ubaf14i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14825,7 +14746,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ubapi do
+  def _ubapi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14839,7 +14760,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ucomsi do
+  def _ucomsi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -8,
@@ -14853,7 +14774,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def unbi do
+  def _unbi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -14867,7 +14788,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def van91i do
+  def _van91i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 7,
@@ -14881,7 +14802,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def van9116i do
+  def _van9116i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14895,7 +14816,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def vche4ii do
+  def _vche4ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14909,7 +14830,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def vdi96ii do
+  def _vdi96ii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14923,7 +14844,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def vha464i do
+  def _vha464i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14937,7 +14858,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def vnei do
+  def _vnei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14951,7 +14872,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def vpak11ai do
+  def _vpak11ai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: -1,
@@ -14965,7 +14886,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def vpak11bi do
+  def _vpak11bi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -14979,7 +14900,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def vpaskiii do
+  def _vpaskiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -14993,7 +14914,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def vspi do
+  def _vspi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -15007,7 +14928,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def vtu19109i do
+  def _vtu19109i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -15021,7 +14942,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def wvii do
+  def _wvii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 27,
@@ -15035,7 +14956,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xagi do
+  def _xagi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -15049,7 +14970,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xapi do
+  def _xapi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -15063,7 +14984,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xbai do
+  def _xbai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -15077,7 +14998,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xca85iv do
+  def _xca85iv do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -15091,7 +15012,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xcei do
+  def _xcei do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,
@@ -15105,7 +15026,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xcmi do
+  def _xcmi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 8,
@@ -15119,7 +15040,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xhoi do
+  def _xhoi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -15133,7 +15054,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xhoii do
+  def _xhoii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -15147,7 +15068,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xmai do
+  def _xmai do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -15161,7 +15082,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xmaiii do
+  def _xmaiii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -15175,7 +15096,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xmaji do
+  def _xmaji do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -15189,7 +15110,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xmii do
+  def _xmii do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 2,
@@ -15203,7 +15124,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xmni do
+  def _xmni do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 5,
@@ -15217,7 +15138,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def xspi do
+  def _xspi do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 1,
@@ -15231,7 +15152,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def ykri do
+  def _ykri do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 11,
@@ -15245,7 +15166,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def yps3606i do
+  def _yps3606i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -15259,7 +15180,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def yru12986i do
+  def _yru12986i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 0,
@@ -15273,7 +15194,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def zrai do
+  def _zrai do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -15287,7 +15208,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def zrmi do
+  def _zrmi do
     %Bio.Restriction.Enzyme{
       blunt?: true,
       cut_1: 3,
@@ -15301,7 +15222,7 @@ defmodule Bio.Restriction.Enzyme do
   end
 
   @doc false
-  def zsp2i do
+  def _zsp2i do
     %Bio.Restriction.Enzyme{
       blunt?: false,
       cut_1: 5,

@@ -4,23 +4,134 @@ defmodule RestrictionTest do
   doctest Bio.Restriction
   doctest Bio.Restriction.Enzyme
 
+  alias Bio.Restriction.Enzyme
   import Bio.Restriction.Enzyme
 
   describe "get" do
     test "it takes an atom" do
-      assert bsmbi() == get(:bsmbi)
+      expected = %Enzyme{
+        blunt?: false,
+        cut_1: 7,
+        cut_2: 11,
+        name: "BsmBI",
+        pattern: "cgtctc",
+        suppliers: [:N]
+      }
+
+      {:ok, actual} = get(:bsmbi)
+
+      assert expected == actual
     end
 
     test "it ignores casing" do
-      assert zsp2i() == get(:Zsp2I)
+      expected = %Enzyme{
+        blunt?: false,
+        cut_1: 5,
+        cut_2: 1,
+        name: "Zsp2I",
+        pattern: "atgcat",
+        suppliers: [:I, :V]
+      }
+
+      {:ok, actual} = get(:Zsp2I)
+
+      assert expected == actual
     end
 
     test "it takes a binary" do
-      assert aoxi() == get("aoxi")
+      expected = %Enzyme{
+        blunt?: false,
+        cut_1: -1,
+        cut_2: 4,
+        name: "AoxI",
+        pattern: "ggcc",
+        suppliers: [:I]
+      }
+
+      {:ok, actual} = get("aoxi")
+
+      assert expected == actual
     end
 
     test "deals with '-' symbols" do
-      assert cviki_1() == get("CviKI-1")
+      expected = %Enzyme{
+        blunt?: true,
+        cut_1: 2,
+        cut_2: 2,
+        name: "CviKI-1",
+        pattern: "rgcy",
+        suppliers: [:N]
+      }
+
+      {:ok, actual} = get("CviKI-1")
+
+      assert expected == actual
+    end
+
+    test "returns the name and error in thruple" do
+      assert {:error, :undef_enzyme, "garbage"} = get("garbage")
+    end
+  end
+
+  describe "get!" do
+    test "it takes an atom" do
+      expected = %Enzyme{
+        blunt?: false,
+        cut_1: 7,
+        cut_2: 11,
+        name: "BsmBI",
+        pattern: "cgtctc",
+        suppliers: [:N]
+      }
+
+      actual = get!(:bsmbi)
+
+      assert expected == actual
+    end
+
+    test "it ignores casing" do
+      expected = %Enzyme{
+        blunt?: false,
+        cut_1: 5,
+        cut_2: 1,
+        name: "Zsp2I",
+        pattern: "atgcat",
+        suppliers: [:I, :V]
+      }
+
+      actual = get!(:Zsp2I)
+
+      assert expected == actual
+    end
+
+    test "it takes a binary" do
+      expected = %Enzyme{
+        blunt?: false,
+        cut_1: -1,
+        cut_2: 4,
+        name: "AoxI",
+        pattern: "ggcc",
+        suppliers: [:I]
+      }
+
+      actual = get!("aoxi")
+
+      assert expected == actual
+    end
+
+    test "deals with '-' symbols" do
+      expected = %Enzyme{
+        blunt?: true,
+        cut_1: 2,
+        cut_2: 2,
+        name: "CviKI-1",
+        pattern: "rgcy",
+        suppliers: [:N]
+      }
+
+      actual = get!("CviKI-1")
+
+      assert expected == actual
     end
   end
 
@@ -39,7 +150,7 @@ defmodule RestrictionTest do
 
     output =
       initial
-      |> Bio.Restriction.digest(Bio.Restriction.Enzyme.bsmbi())
+      |> Bio.Restriction.digest(get!("bsmbi"))
 
     assert output == ["ttacgtctca", "gtagc"]
     assert List.to_string(output) == initial
@@ -60,7 +171,7 @@ defmodule RestrictionTest do
 
     output =
       initial
-      |> Bio.Restriction.digest(Bio.Restriction.Enzyme.bsmbi())
+      |> Bio.Restriction.digest(get!("bsmbi"))
 
     assert List.to_string(output) == initial
     assert output == ["ttacgtctca", "gtagcttacgtctca", "gtagc"]
@@ -81,7 +192,7 @@ defmodule RestrictionTest do
 
     output =
       initial
-      |> Bio.Restriction.digest(Bio.Restriction.Enzyme.paqci())
+      |> Bio.Restriction.digest(get!("paqci"))
 
     assert List.to_string(output) == initial
     assert output == ["tagcctcttacgcacctgccctg", "cgcttaggacgatagttgagt"]
@@ -104,7 +215,7 @@ defmodule RestrictionTest do
 
     output =
       initial
-      |> Bio.Restriction.digest(Bio.Restriction.Enzyme.paqci())
+      |> Bio.Restriction.digest(get!("paqci"))
 
     assert List.to_string(output) == initial
     assert output == ["tagcctcttacgcccgccctgcgcttaggacgatagcacctgcttt"]
@@ -124,7 +235,7 @@ defmodule RestrictionTest do
 
     output =
       starting
-      |> Bio.Restriction.digest(Bio.Restriction.Enzyme.aoxi())
+      |> Bio.Restriction.digest(get!("aoxi"))
 
     assert List.to_string(output) == starting
     assert output == ["tagcctcttac", "gggcccctgcgcttaggacgatagttgagt"]
@@ -145,7 +256,7 @@ defmodule RestrictionTest do
 
     output =
       starting
-      |> Bio.Restriction.digest(Bio.Restriction.Enzyme.aoxi())
+      |> Bio.Restriction.digest(get!("aoxi"))
 
     assert List.to_string(output) == starting
 
@@ -172,7 +283,7 @@ defmodule RestrictionTest do
 
     output =
       initial
-      |> Bio.Restriction.digest(Bio.Restriction.Enzyme.aoxi())
+      |> Bio.Restriction.digest(get!("aoxi"))
 
     assert List.to_string(output) == initial
     assert output == expected
@@ -182,7 +293,7 @@ defmodule RestrictionTest do
   test "large sequence with bsmbi" do
     output =
       "cggaacatggcgtgccctaccggctataccgactgtctgagtcctctagggttcgtaatgacgccacccttagggtatacgggcagtaccacagtcaaatatttcaccagtctcctgtactcggaccttttaacgtcgatcaatgacagcaattttcgccatggtaggatttcccggtttgagcgtgagtcgattgccaggggcggagactaaagcgtttgctactcggcttggtctggatatcatttggagtgcgccaacttcagatccacctattgctgccgaaggagacggcgctcaagaacaccccatgttacccccgagatacgaggaagaagccggttagttggtttcagggcactgggaactctactgggctggtaagaggtatacaatatgtttgtgcctgcatgtataagccacagcctactctacaaagtggcgaagccacccacgggactgcgatcagggaggggttagccacagtccatgtattcagttgatacggatgtcagttagttggctcgcggtcgtcacagcggaagcatgcttcccgggctgggcttctgtagactctccatccggatgtgatctgatttttggtaaccacagatttcacagaggaggaagaacgggcaatatcctagcccgggaacagctgtctggttcgcgttcattaacacaccagctgcaaaacctcagaaagaattatgtgtctcacgaagcgtgtcgtagatgcctatcagcgtgcgcttagttggcacgggtggggccgactaggtactaggaacccttgcaatttcagggggacttagaaaggtccgtattggacagtagtccagaccctgagtgtgtatcaattggcttgcatagccattcaggtaatagctgtgcgtctccgaggactttctttctccggagtactggctctgtggatctcaactcatacacttgataataagtatccggcgcctgcgaagtctgccaacaactgtgtggcatttgccaagcggtcatgcttcggaatcacccgaagtttaaaatgcacttagaatgcctatcgttaacacagattcgcgaaggcgactgttggggaccgcgcttcaacgcaaggtactgtcgtcttcttggactacagagcgcgatacacacctgagtatagaaaaggtcaccgttttgtaacgcctggacctatagggtgacgggtttgcctcgactgtccgctttccactaaaaacagaaacttatcgtccatggtgacgtctgtttgtcaggtggttctggacgatcgccctgggaggattcaaatagttttgatctaccgcctcgtcggaaaccggtaccagagctaatgacaaattacggcccacccctgaataagtggtgtgaacggcctgcccgttgagtaacccccgcgtgagcatttgtgacgtctgaagtcgctcaaccgcgactacgtttattacacgggtataatttactgctcgcacatgtaaacggt"
-      |> Bio.Restriction.digest(Bio.Restriction.Enzyme.bsmbi())
+      |> Bio.Restriction.digest(get("bsmbi"))
 
     expected = [
       "cggaacatggcgtgccctaccggctataccgactgtctgagtcctctagggttcgtaatgacgccacccttagggtatacgggcagtaccacagtcaaatatttcaccagtctcctgtactcggaccttttaacgtcgatcaatgacagcaattttcgccatggtaggatttcccggtttgagcgtgagtcgattgccaggggcggagactaaagcgtttgctactcggcttggtctggatatcatttggagtgcgccaacttcagatccacctattgctgccgaaggagacggcgctcaagaacaccccatgttacccccgagatacgaggaagaagccggttagttggtttcagggcactgggaactctactgggctggtaagaggtatacaatatgtttgtgcctgcatgtataagccacagcctactctacaaagtggcgaagccacccacgggactgcgatcagggaggggttagccacagtccatgtattcagttgatacggatgtcagttagttggctcgcggtcgtcacagcggaagcatgcttcccgggctgggcttctgtagactctccatccggatgtgatctgatttttggtaaccacagatttcacagaggaggaagaacgggcaatatcctagcccgggaacagctgtctggttcgcgttcattaacacaccagctgcaaaacctcagaaagaattatgtgtctcacgaagcgtgtcgtagatgcctatcagcgtgcgcttagttggcacgggtggggccgactaggtactaggaacccttgcaatttcagggggacttagaaaggtccgtattggacagtagtccagaccctgagtgtgtatcaattggcttgcatagccattcaggtaatagctgtgcgtctcc",
@@ -196,7 +307,7 @@ defmodule RestrictionTest do
   test "large sequence with asi256i" do
     output =
       "cgagcgcttcgtaagtcggacgaaagaaaaaggtgatcaatagcatatcgtcttctgggaatccaccgtagccgatgctgtagcagtaaggtttgctacccattcgggtaaggccgctttgcaagttctttttggtacgcatgccgcgtggtaagggtgtcacagtgcacacattctcccatctaagtagttctatagaaaaacggttgggactagtaaatactgtagacaagtgacttatacaatcgtgccaggacgctgtgggtacgattcagttcgatctcttatacactcgtgcaatgtcgatcaattaagtaaaacaagagacttttagtgcatctttgggatcggtaagctgtcgtaagtacattttgcgcaatcttggtatatcccctcacgccgtccgatacgactacgcatgctgacgttagcttgttggagatggtgaaaaaaggtctgttggaaggccgtggccagtcgcacaacatcatataagattctccgtttatgttgtgtagagtcacatatattccggcggtcgcccaacgatacgcctacagaatgtatggataggctactggagcgtaacgttgccttcccctagttccgatatagcgtggtgatctaccagtgaaccctgtgtggctgcccttaaaggaaagcttgctgtcaccacaacggggtaacgtctatactcgcgatcgacctctaggttgagatcacagagcgacgcagcggcctaggcattggcaccctaggtggtagtctttccgtataactccctcaggtagaacaggcatttagccccacgccccggctgacctcaccgatgcgttcgacttttcgggtatacatgcggccgagcaccgagtgtttcttggaagtcccgactcaggtaccgtctgtagccctgaatgtactgaagccagaacatttatttgaggcaaattcctaaaaagaagtgagaacccaacgttccctccctgagcgtggccagggatagaactaaaagtctccatgagatatttccaggttcttgtaccctccatatagtattttccctgctctatggactcactccgtaattcccgccggccgctcctttgttccctcctgatactcagtccatcctgcctagccgactgcgcgaaacgaagctaaagcgtcgtgctagagcgagcttggaatcgaatcagggcataggtgagttcaatcggggaaccaccagcaccgcacttgacatccctgatttacgctgaagagttaatcaatgtgagagctggaactgctgaggtctttctgacttcataatgcctgcgctgtgacccaattgatattgtcgtcggaaagttattccgttccataccattggaactaagccagacatccgtttaattatgcggtctgagagagtactttcgctacgctctttctggttatcaggcgtacacgggaatcgtaatagattatcgtagtcaaagggacaacaaagggcacgctc"
-      |> Bio.Restriction.digest(Bio.Restriction.Enzyme.asi256i())
+      |> Bio.Restriction.digest(get!("asi256i"))
 
     expected = [
       "cgagcgcttcgtaagtcggacgaaagaaaaaggtg",
@@ -216,7 +327,7 @@ defmodule RestrictionTest do
   test "large sequence with paqci" do
     output =
       "ccgacttgacagtgcgcaaagtcgtaagggtctagttaaatgtcgtcacctgcggcgatcaggatcgcaccatgtatatcgacgtattgtccgcgcgaatatcaactgatgagccttccagaagcgcatccacagatacgtccattcaggatcaccacacagtgggtccgtgtctccgtacacctgcttcacacacggtgatgatggttgctgcgtttcctagagcggtaccgatttatctgagttatgtcatgctcccaagtaagtgaaaacagtggctgttaaggtgcgggcctctatctgaaggcctgttgcgttctgcacatggacaagcccggtgcacacgccctacgattttcgtgatctgctcctcccgcccccctagcgaccggactactgtacgatcaaaaggctaatccggagattgcttgtatctgcggccgctagtgtcaacaaccgtacttcctgtccgtcgttggccgtttcagctaccccggtgataaagccagaatgggccagaccatgattagagcgtggaatttttccactaccagcgctaatatgacgcaggctcatttcgtgcacttcaaggcgtcaatacatctgatttggcaggctcgcccgtacgtgtctcaaacaatttcgctggtacctcctttccacgaagtatcatagtttgtgacgctccacctgctggtatcgcttttggtttccgtcatctggtagccaaatgcttcacctgcaccaaataatggtgggagttttggggtaaccaagcgctagatgtggcgtatgtcacaatgaggtttcacttacagtagccatagaggaaaaacttctagtagacctttcccctgttcagctcacaagggcctctttgggctcaggcctagtgcgcagttagcaggacactagcccaatgatctctaaaggggtcgcaagtggccaagttctacacatgtggggtaccagtctgttgccgtcacatatgacacttagcccttgtgactaccttctctgtgagccggtcattgagtccggccttatcgctaagaacgagctggtaatagcacctgctaagtctcattatgcttaatctggcagtgccatgttcagcaagtttaccaatatgctcatcacggagtaagctccgaatgacgcggaatgcccgtaggtcgcatcccaagtgtatttgcgagactgttaaacagtcgagcttaccaacgatggatctgacgtgaacacgtgatgagaggaacactgtaccaggagggcaacccggggagttgcatacggggaattatatcatcatgcacacaggacattcagcgtaacgtcggaccaggggagtaacgtatatggtgccatattgcggcgcacctgccttttcatcactgcgcagttccacaggctctctaattcctaggaatacacaaggccgtaaactaataactcccgcccctattagctcaagcgctgcccttttagatgcgtcgtataacctgcacgtgcagtgcgggagtagtctccatcgacacctgcacaggtat"
-      |> Bio.Restriction.digest(Bio.Restriction.Enzyme.paqci())
+      |> Bio.Restriction.digest(get!("paqci"))
 
     expected = [
       "ccgacttgacagtgcgcaaagtcgtaagggtctagttaaatgtcgtcacctgcggcg",
@@ -251,7 +362,7 @@ defmodule RestrictionTest do
     |> Enum.map(fn [sequence, expectation] ->
       output =
         sequence
-        |> Bio.Restriction.digest(Bio.Restriction.Enzyme.asi256i())
+        |> Bio.Restriction.digest(get!("asi256i"))
 
       true = assert output == expectation
     end)
