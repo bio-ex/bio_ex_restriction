@@ -30,3 +30,5 @@ bio_ex_restriction-*.tar
 /tmp/
 
 .iex.exs
+
+.todo.md
