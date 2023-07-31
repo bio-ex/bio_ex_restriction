@@ -68,12 +68,16 @@ defmodule Mix.Tasks.Bio.Restriction.Build do
 
       defmodule Bio.Restriction.Enzyme do
       @moduledoc \"\"\"
-      This module houses all of the functions for accessing a struct
-      of restriction enzyme data, the `%Bio.Restriction.Enzyme`.
+      This module represents the basic data of a restriction enzyme, as well as
+      functions for accessing them.
 
-      All functions are the name of the enzyme in lowercase, where any `-`
-      characters have been made `_`. By example, "BsmBI" would be `bsmbi` or
-      "CviKI-1" would become `cviki_1`.
+      The core struct contains information regarding the cut sites, bluntness,
+      name, and recognition site of the restriction enzyme that it represents.
+
+      The structs declaration is wrapped in a function that is prefixed by an
+      `_`, this allows the import of the module without overloading the context
+      with a lot of extraneous functions. The primary interface for accessing
+      enzymes is the `get/1` function.
       \"\"\"
 
 
@@ -105,6 +109,17 @@ defmodule Mix.Tasks.Bio.Restriction.Build do
           %Bio.Restriction.Enzyme#{stringify(enzyme_map)}
         end
         """ end)}
+
+      @all [#{enzymes |> Enum.map(fn enzyme_map -> ~s"""
+        :_#{Map.get(enzyme_map, :name) |> String.downcase() |> String.replace("-", "_")},
+        """ end)}
+      ]
+
+        def all() do
+          @all
+          |> Enum.map(&apply(__MODULE__, &1, []))
+        end
+
       end
       """
     )

@@ -9,7 +9,8 @@ defmodule Bio.Restriction.Enzyme.Core do
       they are available through a given entity.
 
       This function allows you to get the full name for a given entity from that
-      code.
+      code. Codes can be given as either an atom or a binary, either will be
+      modified to ensure case insensitive comparisons.
 
       # Examples
           iex>Bio.Restriction.Enzyme.get_supplier(:N)
@@ -33,7 +34,10 @@ defmodule Bio.Restriction.Enzyme.Core do
 
       @doc """
       Get an enzyme struct by name, where name is either a binary or atom and
-      case insensitive.
+      case insensitive. Returning an error tuple, the error case is a
+      three-tuple with the requested enzyme name as well as the error:
+
+          {:error, :undef_enzyme, <enzyme>}
 
       # Examples
           iex>Bio.Restriction.Enzyme.get(:CviRI)
@@ -57,6 +61,9 @@ defmodule Bio.Restriction.Enzyme.Core do
               name: "CviRI",
               pattern: "tgca"
             }}
+
+          iex>Bio.Restriction.Enzyme.get(:not_an_enzyme)
+          {:error, :undef_enzyme, "not_an_enzyme"}
       """
       @spec get(atom() | String.t()) :: t()
       def get(name) when is_atom(name) do
@@ -84,8 +91,7 @@ defmodule Bio.Restriction.Enzyme.Core do
       end
 
       @doc """
-      Get an enzyme struct by name, where name is either a binary or atom and
-      case insensitive.
+      Like `get/1`, but raises for unknown enzymes or returns the struct.
 
       # Examples
           iex>Bio.Restriction.Enzyme.get!(:CviRI)
