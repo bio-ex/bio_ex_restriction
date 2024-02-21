@@ -1,3 +1,13 @@
+# TODO: create an efficient algorithm that can deal with simple cases of
+# palindromic, non-ambiguous sequences.
+# TODO: create an efficient algorithm that can deal with Type IIs RE without any
+# ambiguous sequences
+# TODO: Create an algorithm that can deal with ambiguous cases, and more complex
+# edge cases
+# TODO: create a data structure for lazy evaluation of digestion
+# TODO: create a data structure for carrying un-applied digestions?
+# TODO: Think about how we would model double-stranded digestions without access
+# to the DnaDoubleStrand module.
 defmodule Bio.Restriction do
   @moduledoc """
   Interaction between `Bio.Sequence` objects and `Bio.Restriction.Enzyme`s.
